@@ -118,7 +118,7 @@ body {
   color: rgb(60, 60, 203);
 }
 .checked {
-  background-color: greenyellow;
+  background-color: greenyellow !important;
 }
 .submit-btn:disabled {
   background-color: gray;
