@@ -79,7 +79,7 @@ function deleteTask(itemID) {
 //EDIT USER DESCRIPTION
 function editTask(itemID, newValue) {
   fetch(`http://emircan-task-manager.herokuapp.com/tasks/${itemID}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + getUserToken(),
@@ -87,8 +87,7 @@ function editTask(itemID, newValue) {
     body: JSON.stringify(newValue),
   })
     .then((res) => res.json())
-    .then(() => getData())
-    .then(() => display());
+    .then(() => getData());
 }
 //WHEN PAGE LOADS GET DATA
 window.addEventListener("DOMContentLoaded", function () {
@@ -148,9 +147,9 @@ function display() {
     editBtn.addEventListener("click", (e) => editTodo(e));
     checkIcon.addEventListener("click", (e) => changeStatus(e));
 
-    if (todo.complated === true) {
+    if (todo.completed === true) {
       liItem.classList.add("checked");
-      checkIcon.classList.add("fa-check-color");
+      checkIcon.classList.add("check-icon-checked");
     }
   });
 }
@@ -175,15 +174,15 @@ function editTodo(event) {
 
     submitBtn.disabled = true;
   } else {
-    let todoText = inputArea.value;
+    let todoText = {
+      description: inputArea.value,
+    };
     editTask(btn.id, todoText);
     // editTodo.description = todoText;
 
     btn.classList.remove("confirm");
 
     submitBtn.disabled = false;
-
-    display();
   }
 
   //localStorage.setItem("todos", JSON.stringify(todos));
@@ -192,14 +191,14 @@ function editTodo(event) {
 //CHANGE TODOS STATUS
 function changeStatus(event) {
   let checkIcon = event.target;
-
   const checkedTodo = todos.find((todo) => todo._id == checkIcon.id);
-
-  editTask(checkIcon.id, !checkedTodo.complated);
+  let checkedStatus = {
+    completed: !checkedTodo.completed,
+  };
+  editTask(checkedTodo._id, checkedStatus);
   //checkedTodo.status = !checkedTodo.status;
   //localStorage.setItem("todos", JSON.stringify(todos));
   submitBtn.disabled = false;
-  display();
 }
 
 submitBtn.addEventListener("click", () => {

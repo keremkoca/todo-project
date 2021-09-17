@@ -99,6 +99,9 @@ body {
   -ms-transform: scale(1.1, 1.1);
   transform: scale(1.1, 1.1);
 }
+.check-icon-checked {
+  color: rgb(6, 244, 6);
+}
 .fa-trash-alt:hover {
   color: red;
   -ms-transform: scale(1.1, 1.1);
