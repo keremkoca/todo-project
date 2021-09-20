@@ -56,18 +56,15 @@ loginForm.addEventListener("submit", (e) => {
     email: userName,
     password: userPassword,
   };
-  console.log(JSON.stringify(userObj));
-  fetch("http://emircan-task-manager.herokuapp.com/users/login", {
+  // console.log(JSON.stringify(userObj));
+  fetch("http://192.168.0.22:3000/users/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(userObj),
   })
-    .then((response) => {
-      return response.text();
-    })
-    .then((userInfo) => (userInfo ? JSON.parse(userInfo) : {}))
+    .then((userInfo) => (userInfo ? userInfo.json() : {}))
     .then((userInfo) => {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       window.location.href = "http://127.0.0.1:5500/";
@@ -111,7 +108,7 @@ createAccount.addEventListener("submit", (e) => {
 
   ///FETCH REQUEST///
   if (passwordValidation) {
-    fetch("http://emircan-task-manager.herokuapp.com/users", {
+    fetch("http://192.168.0.22:3000/users", {
       method: "POST",
       mode: "cors",
       headers: {

@@ -34,7 +34,7 @@ function addData(value) {
  * @function Authorizes user with JWT
  */
 function getData() {
-  fetch("http://emircan-task-manager.herokuapp.com/tasks/", {
+  fetch("http://192.168.0.22:3000/tasks/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function getData() {
  * @function adds new todos
  */
 function changeData(value) {
-  fetch("http://emircan-task-manager.herokuapp.com/tasks/", {
+  fetch("http://192.168.0.22:3000/tasks/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -66,7 +66,7 @@ function changeData(value) {
 }
 //DELETE USER DATA
 function deleteTask(itemID) {
-  fetch(`http://emircan-task-manager.herokuapp.com/tasks/${itemID}`, {
+  fetch(`http://192.168.0.22:3000/tasks/${itemID}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -78,7 +78,7 @@ function deleteTask(itemID) {
 }
 //EDIT USER DESCRIPTION
 function editTask(itemID, newValue) {
-  fetch(`http://emircan-task-manager.herokuapp.com/tasks/${itemID}`, {
+  fetch(`http://192.168.0.22:3000/tasks/${itemID}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
