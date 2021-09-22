@@ -34,6 +34,31 @@ body {
   margin-bottom: 2rem;
   text-align: center;
 }
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 1rem;
+  background: #e3e1e1;
+}
+.user-pp {
+  height: 200px;
+  width: 200px;
+  background-image: url();
+  background-size: 200px 200px;
+  margin: 1rem;
+  background-color: red;
+}
+.user-pp-input {
+  display: inline;
+  width: 80px;
+}
+
 .input {
   display: inline-block;
   width: 79%;

@@ -1,6 +1,70 @@
 const todoUl = document.querySelector(".todo-ul");
 const inputArea = document.querySelector(".input");
 const submitBtn = document.querySelector(".submit-btn");
+
+const userPP = document.querySelector(".user-pp");
+const userPPInput = document.querySelector(".user-pp-input");
+//POST IMG TO SERVER
+function postImg(image) {
+  console.log("emir");
+  console.log(image);
+  fetch("http://192.168.0.22:3000/users/me/avatar", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + getUserToken(),
+    },
+    body: image,
+  })
+    .then((res) => authorizationErrorHandler(res))
+    .then((res) => console.log(res))
+    .catch((e) => console.log(e));
+}
+let img;
+
+//GET IMG FROM SERVER
+function getImg() {
+  getUserInfo();
+  fetch(`http://192.168.0.22:3000/users/${currentUser._id}/avatar`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + getUserToken(),
+    },
+  })
+    .then((res) => authorizationErrorHandler(res))
+    .then((res) => res.blob())
+    .then((res) => onLoadImg(res));
+}
+//WHEN IMG CHANGES
+userPPInput.addEventListener("change", function () {
+  changeImage(this);
+});
+
+function changeImage(input) {
+  let reader;
+  if (input.files && input.files[0]) {
+    reader = new FileReader();
+
+    reader.readAsDataURL(input.files[0]);
+
+    reader.addEventListener("load", function () {
+      userPP.setAttribute("src", this.result);
+      let formData = new FormData();
+      formData.append("avatar", input.files[0]);
+      postImg(formData);
+    });
+  }
+}
+
+function onLoadImg(value) {
+  let reader;
+  reader = new FileReader();
+  reader.readAsDataURL(value);
+
+  reader.addEventListener("load", function () {
+    userPP.setAttribute("src", this.result);
+  });
+}
 // Taking token from localStorage
 let myUser;
 
@@ -11,7 +75,14 @@ let myUser;
 function getUserToken() {
   const user = localStorage.getItem("userInfo");
   myUser = JSON.parse(user);
-  return myUser.token;
+  return myUser != null ? myUser.token : null;
+}
+let currentUser;
+function getUserInfo() {
+  if (!currentUser === undefined) return;
+  const user = localStorage.getItem("userInfo");
+  myUser = JSON.parse(user);
+  currentUser = myUser.user;
 }
 
 let todos = [];
@@ -41,11 +112,21 @@ function getData() {
       Authorization: "Bearer " + getUserToken(),
     },
   })
+    .then((res) => authorizationErrorHandler(res))
     .then((res) => res.json())
     .then((data) => keepData(data))
     .then(() => display());
 }
-
+function authorizationErrorHandler(val) {
+  if (val.status === 401) {
+    window.location.href = "http://127.0.0.1:5500/login-index.html";
+    console.log("redirected");
+  }
+  if (val.status === 404) {
+    console.log(val.blob());
+  }
+  return val;
+}
 /**
  *
  * @param {*} value new todo
@@ -60,6 +141,7 @@ function changeData(value) {
     },
     body: JSON.stringify(value),
   })
+    .then((res) => authorizationErrorHandler(res))
     .then((res) => res.json())
     .then((data) => addData(data))
     .then(() => display());
@@ -92,7 +174,7 @@ function editTask(itemID, newValue) {
 //WHEN PAGE LOADS GET DATA
 window.addEventListener("DOMContentLoaded", function () {
   getData();
-
+  getImg();
   //let storedTodos = localStorage.getItem("todos");
   // todos = JSON.parse(storedTodos);
 });
@@ -120,7 +202,17 @@ function add() {
 function display() {
   inputArea.value = "";
   todoUl.innerHTML = "";
-  console.log(todos);
+  document.querySelector(".user-profile-info").innerHTML = "";
+  getUserInfo();
+
+  const userName = document.createElement("p");
+  userName.textContent = currentUser.name;
+  document.querySelector(".user-profile-info").appendChild(userName);
+
+  const userMail = document.createElement("p");
+  userMail.textContent = currentUser.email;
+  document.querySelector(".user-profile-info").appendChild(userMail);
+
   todos.forEach((todo) => {
     const liItem = document.createElement("li");
     liItem.innerText = todo.description;
