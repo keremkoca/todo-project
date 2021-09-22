@@ -1,6 +1,7 @@
 const loginForm = document.querySelector("#login");
 const createAccount = document.querySelector("#create-account");
 
+const url = `https://emircan-task-manager.herokuapp.com`;
 const createAccountLink = document.querySelector("#link-create-account");
 const loginLink = document.querySelector("#link-login");
 /////SWITCH TO LOGIN/CREATE ACCOUNT///////
@@ -36,6 +37,7 @@ function clearFormMessage(formElement, messageContainer) {
   });
 }
 let myUserInfo;
+console.log(`${url}/users`);
 ////LOGIN/////
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -57,7 +59,7 @@ loginForm.addEventListener("submit", (e) => {
     password: userPassword,
   };
   // console.log(JSON.stringify(userObj));
-  fetch("http://192.168.0.22:3000/users/login", {
+  fetch(`${url}/users/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -107,8 +109,9 @@ createAccount.addEventListener("submit", (e) => {
   };
 
   ///FETCH REQUEST///
+
   if (passwordValidation) {
-    fetch("http://192.168.0.22:3000/users", {
+    fetch(`${url}/users`, {
       method: "POST",
       mode: "cors",
       headers: {

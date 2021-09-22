@@ -2,13 +2,15 @@ const todoUl = document.querySelector(".todo-ul");
 const inputArea = document.querySelector(".input");
 const submitBtn = document.querySelector(".submit-btn");
 
+const url = "https://emircan-task-manager.herokuapp.com";
+
 const userPP = document.querySelector(".user-pp");
 const userPPInput = document.querySelector(".user-pp-input");
 //POST IMG TO SERVER
 function postImg(image) {
   console.log("emir");
   console.log(image);
-  fetch("http://192.168.0.22:3000/users/me/avatar", {
+  fetch(url + "/users/me/avatar", {
     method: "POST",
     headers: {
       Authorization: "Bearer " + getUserToken(),
@@ -24,7 +26,7 @@ let img;
 //GET IMG FROM SERVER
 function getImg() {
   getUserInfo();
-  fetch(`http://192.168.0.22:3000/users/${currentUser._id}/avatar`, {
+  fetch(url + `/users/${currentUser._id}/avatar`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -105,7 +107,7 @@ function addData(value) {
  * @function Authorizes user with JWT
  */
 function getData() {
-  fetch("http://192.168.0.22:3000/tasks/", {
+  fetch(url + "/tasks/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -123,7 +125,6 @@ function authorizationErrorHandler(val) {
     console.log("redirected");
   }
   if (val.status === 404) {
-    console.log(val.blob());
   }
   return val;
 }
@@ -133,7 +134,7 @@ function authorizationErrorHandler(val) {
  * @function adds new todos
  */
 function changeData(value) {
-  fetch("http://192.168.0.22:3000/tasks/", {
+  fetch(url + "/tasks/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -148,7 +149,7 @@ function changeData(value) {
 }
 //DELETE USER DATA
 function deleteTask(itemID) {
-  fetch(`http://192.168.0.22:3000/tasks/${itemID}`, {
+  fetch(url + `/tasks/${itemID}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -160,7 +161,7 @@ function deleteTask(itemID) {
 }
 //EDIT USER DESCRIPTION
 function editTask(itemID, newValue) {
-  fetch(`http://192.168.0.22:3000/tasks/${itemID}`, {
+  fetch(url + `/tasks/${itemID}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
