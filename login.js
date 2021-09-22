@@ -10,6 +10,7 @@ createAccountLink.addEventListener("click", (e) => {
   loginForm.classList.add("form-hidden");
   createAccount.classList.remove("form-hidden");
 });
+
 loginLink.addEventListener("click", (e) => {
   e.preventDefault();
   loginForm.classList.remove("form-hidden");
