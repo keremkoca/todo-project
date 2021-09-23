@@ -38,7 +38,7 @@ function clearFormMessage(formElement, messageContainer) {
   });
 }
 let myUserInfo;
-console.log(`${url}/users`);
+
 ////LOGIN/////
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -124,6 +124,7 @@ createAccount.addEventListener("submit", (e) => {
       .then((userInfo) => {
         saveUserInfo(userInfo);
         console.log("Success:", userInfo);
+        window.location.reload();
       })
       .catch((error) => {
         console.log("Error:", error);

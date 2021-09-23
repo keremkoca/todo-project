@@ -1,6 +1,7 @@
 const todoUl = document.querySelector(".todo-ul");
 const inputArea = document.querySelector(".input");
 const submitBtn = document.querySelector(".submit-btn");
+const logoutBtn = document.querySelector(".logout-btn");
 
 const url = "https://emircan-task-manager.herokuapp.com";
 
@@ -8,8 +9,6 @@ const userPP = document.querySelector(".user-pp");
 const userPPInput = document.querySelector(".user-pp-input");
 //POST IMG TO SERVER
 function postImg(image) {
-  console.log("emir");
-  console.log(image);
   fetch(url + "/users/me/avatar", {
     method: "POST",
     headers: {
@@ -21,7 +20,6 @@ function postImg(image) {
     .then((res) => console.log(res))
     .catch((e) => console.log(e));
 }
-let img;
 
 //GET IMG FROM SERVER
 function getImg() {
@@ -37,7 +35,16 @@ function getImg() {
     .then((res) => res.blob())
     .then((res) => onLoadImg(res));
 }
-//WHEN IMG CHANGES
+function onLoadImg(value) {
+  let reader;
+  reader = new FileReader();
+  reader.readAsDataURL(value);
+
+  reader.addEventListener("load", function () {
+    userPP.setAttribute("src", this.result);
+  });
+}
+//ADD - CHANGE IMG
 userPPInput.addEventListener("change", function () {
   changeImage(this);
 });
@@ -56,16 +63,6 @@ function changeImage(input) {
       postImg(formData);
     });
   }
-}
-
-function onLoadImg(value) {
-  let reader;
-  reader = new FileReader();
-  reader.readAsDataURL(value);
-
-  reader.addEventListener("load", function () {
-    userPP.setAttribute("src", this.result);
-  });
 }
 // Taking token from localStorage
 let myUser;
@@ -125,6 +122,8 @@ function authorizationErrorHandler(val) {
     console.log("redirected");
   }
   if (val.status === 404) {
+    userPP.setAttribute("src", "pp-default.jpeg");
+    return;
   }
   return val;
 }
@@ -188,7 +187,7 @@ function add() {
   else {
     const todo = {
       description: todoText,
-      id: createID(),
+      //id: createID(),
       complated: false,
     };
     if (todo.text === "") return;
@@ -207,11 +206,11 @@ function display() {
   getUserInfo();
 
   const userName = document.createElement("p");
-  userName.textContent = currentUser.name;
+  userName.textContent = `User : ${currentUser.name}`;
   document.querySelector(".user-profile-info").appendChild(userName);
 
   const userMail = document.createElement("p");
-  userMail.textContent = currentUser.email;
+  userMail.textContent = `Email : ${currentUser.email}`;
   document.querySelector(".user-profile-info").appendChild(userMail);
 
   todos.forEach((todo) => {
@@ -298,8 +297,13 @@ submitBtn.addEventListener("click", () => {
   add();
   display();
 });
-
+logoutBtn.addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "http://127.0.0.1:5500/login-index.html";
+});
+/*
 function createID() {
   const id = Date.now();
   return id;
 }
+*/
