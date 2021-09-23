@@ -59,7 +59,7 @@ loginForm.addEventListener("submit", (e) => {
     email: userName,
     password: userPassword,
   };
-  // console.log(JSON.stringify(userObj));
+  //FETCH LOGIN
   fetch(`${url}/users/login`, {
     method: "POST",
     headers: {
@@ -75,6 +75,8 @@ loginForm.addEventListener("submit", (e) => {
     })
     .catch((error) => {
       console.log("Error:", error);
+      formMessageHandler(loginForm, "error", "Invalid username or password");
+      clearFormMessage(loginForm, ".form-message");
     });
 });
 

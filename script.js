@@ -2,71 +2,15 @@ const todoUl = document.querySelector(".todo-ul");
 const inputArea = document.querySelector(".input");
 const submitBtn = document.querySelector(".submit-btn");
 const logoutBtn = document.querySelector(".logout-btn");
+const userPP = document.querySelector(".user-pp");
+const userPPInput = document.querySelector(".user-pp-input");
 
 const url = "https://emircan-task-manager.herokuapp.com";
 
-const userPP = document.querySelector(".user-pp");
-const userPPInput = document.querySelector(".user-pp-input");
-//POST IMG TO SERVER
-function postImg(image) {
-  fetch(url + "/users/me/avatar", {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + getUserToken(),
-    },
-    body: image,
-  })
-    .then((res) => authorizationErrorHandler(res))
-    .then((res) => console.log(res))
-    .catch((e) => console.log(e));
-}
-
-//GET IMG FROM SERVER
-function getImg() {
-  getUserInfo();
-  fetch(url + `/users/${currentUser._id}/avatar`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + getUserToken(),
-    },
-  })
-    .then((res) => authorizationErrorHandler(res))
-    .then((res) => res.blob())
-    .then((res) => onLoadImg(res));
-}
-function onLoadImg(value) {
-  let reader;
-  reader = new FileReader();
-  reader.readAsDataURL(value);
-
-  reader.addEventListener("load", function () {
-    userPP.setAttribute("src", this.result);
-  });
-}
-//ADD - CHANGE IMG
-userPPInput.addEventListener("change", function () {
-  changeImage(this);
-});
-
-function changeImage(input) {
-  let reader;
-  if (input.files && input.files[0]) {
-    reader = new FileReader();
-
-    reader.readAsDataURL(input.files[0]);
-
-    reader.addEventListener("load", function () {
-      userPP.setAttribute("src", this.result);
-      let formData = new FormData();
-      formData.append("avatar", input.files[0]);
-      postImg(formData);
-    });
-  }
-}
-// Taking token from localStorage
+let todos = [];
 let myUser;
 
+// Taking token from localStorage
 /**
  *
  * @returns user token
@@ -84,7 +28,6 @@ function getUserInfo() {
   currentUser = myUser.user;
 }
 
-let todos = [];
 /**
  * @function setting todos with returned data from server
  */
@@ -116,6 +59,10 @@ function getData() {
     .then((data) => keepData(data))
     .then(() => display());
 }
+/**
+ * @param {*} val response
+ * @function handles errors
+ */
 function authorizationErrorHandler(val) {
   if (val.status === 401) {
     window.location.href = "http://127.0.0.1:5500/login-index.html";
@@ -171,13 +118,60 @@ function editTask(itemID, newValue) {
     .then((res) => res.json())
     .then(() => getData());
 }
-//WHEN PAGE LOADS GET DATA
-window.addEventListener("DOMContentLoaded", function () {
-  getData();
-  getImg();
-  //let storedTodos = localStorage.getItem("todos");
-  // todos = JSON.parse(storedTodos);
+//POST IMG TO SERVER
+function postImg(image) {
+  fetch(url + "/users/me/avatar", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + getUserToken(),
+    },
+    body: image,
+  }).then((res) => authorizationErrorHandler(res));
+}
+
+//GET IMG FROM SERVER
+function getImg() {
+  getUserInfo();
+  fetch(url + `/users/${currentUser._id}/avatar`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + getUserToken(),
+    },
+  })
+    .then((res) => authorizationErrorHandler(res))
+    .then((res) => res.blob())
+    .then((res) => onLoadImg(res));
+}
+function onLoadImg(value) {
+  let reader;
+  reader = new FileReader();
+  reader.readAsDataURL(value);
+
+  reader.addEventListener("load", function () {
+    userPP.setAttribute("src", this.result);
+  });
+}
+//ADD - CHANGE IMG
+userPPInput.addEventListener("change", function () {
+  changeImage(this);
 });
+
+function changeImage(input) {
+  let reader;
+  if (input.files && input.files[0]) {
+    reader = new FileReader();
+
+    reader.readAsDataURL(input.files[0]);
+
+    reader.addEventListener("load", function () {
+      userPP.setAttribute("src", this.result);
+      let formData = new FormData();
+      formData.append("avatar", input.files[0]);
+      postImg(formData);
+    });
+  }
+}
 
 //CREATE A USER AND POST IT TO SERVER
 function add() {
@@ -188,7 +182,7 @@ function add() {
     const todo = {
       description: todoText,
       //id: createID(),
-      complated: false,
+      completed: false,
     };
     if (todo.text === "") return;
     changeData(todo);
@@ -249,7 +243,7 @@ function display() {
 function deleteTodo(event) {
   let btn = event.target;
   deleteTask(btn.id);
-  todos = todos.filter((todo) => todo._id != btn.id);
+  //todos = todos.filter((todo) => todo._id != btn.id);
   //localStorage.setItem("todos", JSON.stringify(todos));
   submitBtn.disabled = false;
 
@@ -263,8 +257,6 @@ function editTodo(event) {
 
   if (!btn.classList.contains("confirm")) {
     inputArea.value = editTodo.description;
-
-    submitBtn.disabled = true;
   } else {
     let todoText = {
       description: inputArea.value,
@@ -273,8 +265,6 @@ function editTodo(event) {
     // editTodo.description = todoText;
 
     btn.classList.remove("confirm");
-
-    submitBtn.disabled = false;
   }
 
   //localStorage.setItem("todos", JSON.stringify(todos));
@@ -292,6 +282,13 @@ function changeStatus(event) {
   //localStorage.setItem("todos", JSON.stringify(todos));
   submitBtn.disabled = false;
 }
+//WHEN PAGE LOADS GET DATA
+window.addEventListener("DOMContentLoaded", function () {
+  getData();
+  getImg();
+  //let storedTodos = localStorage.getItem("todos");
+  // todos = JSON.parse(storedTodos);
+});
 
 submitBtn.addEventListener("click", () => {
   add();
