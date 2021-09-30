@@ -65,7 +65,7 @@ function getData() {
  */
 function authorizationErrorHandler(val) {
   if (val.status === 401) {
-    window.location.href = "http://127.0.0.1:5500/login-index.html";
+    window.location.href = "http://127.0.0.1:5500/login/login.html";
     console.log("redirected");
   }
   if (val.status === 404) {
@@ -296,7 +296,7 @@ submitBtn.addEventListener("click", () => {
 });
 logoutBtn.addEventListener("click", () => {
   localStorage.clear();
-  window.location.href = "http://127.0.0.1:5500/login-index.html";
+  window.location.href = "http://127.0.0.1:5500/login/login.html";
 });
 /*
 function createID() {
