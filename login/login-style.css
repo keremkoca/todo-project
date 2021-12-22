@@ -1,0 +1,122 @@
+body {
+  --color-primary: #009579;
+  --color-primary-dark: #007f67;
+  --color-secondary: #252c6a;
+  --color-error: #cc3333;
+  --color-succes: #4bb544;
+  --border-radius: 4px;
+  /*Creating default values for colors and border-radius*/
+
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px; /* default font-size 16px */
+  background: rgb(63, 94, 251);
+  background: radial-gradient(
+    circle,
+    rgba(63, 94, 251, 1) 0%,
+    rgba(252, 70, 107, 1) 100%
+  );
+}
+.container {
+  width: 400px;
+  max-width: 400px; /* when mobile adjust width */
+  margin: 1rem;
+  padding: 2rem; /*	 rem = Relative to font-size of the root element => 2rem=36px */
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  border-radius: var(
+    --border-radius
+  ); /* selectin default values using var(--name,value)*/
+  background: #ffffff;
+}
+.container,
+.form-input,
+.submit-btn {
+  font: 500 1rem "QuickSand", sans-serif; /*font-weight font-size/line-height font-family*/
+}
+.form > *:first-child  /*selecting first child and setting his margin* (>)=>child combinator*/ {
+  margin-top: 0;
+}
+.form > *:last-child {
+  margin-bottom: 0;
+}
+.title {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.form-message {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.message-error {
+  color: var(--color-error);
+}
+.message-succes {
+  color: var(--color-succes);
+}
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
+  border: 1px solid #dddddd;
+  outline: none;
+  background: #eeeeee;
+  transition: background 0.2s, border-color 0.2s;
+}
+.input:focus {
+  border-color: var(--color-primary); /*on focus apply this changes*/
+  background: #ffffff;
+}
+.form-input-error {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.form-input :valid {
+  color: var(--color-succes);
+  border-color: var(--color-succes);
+}
+.form-input:invalid {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.form-input-error-message {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-error);
+}
+.submit-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius);
+  outline: none;
+  cursor: pointer;
+  background: var(--color-primary);
+}
+.submit-btn:hover {
+  background: var(--color-primary-dark);
+}
+.submit-btn:active {
+  transform: scale(0.98);
+}
+.form-text {
+  text-align: center;
+}
+.form-link {
+  color: var(--color-secondary);
+  text-decoration: none;
+  cursor: pointer;
+}
+.form-link:hover {
+  text-decoration: underline;
+}
+.form-hidden {
+  display: none;
+}
